@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoGuard | Login & Access Portal</title>
+  <meta name="description" content="Sign in to EcoGuard for Pallikaranai Marshland monitoring, administrative review, and field patrol management.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-leaf"></i>
+        </div>
+        <div>
+          <div class="brand-title">EcoGuard</div>
+          <div class="brand-sub">Pallikaranai Marshland</div>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="report.html" class="nav-link">Report Waste</a></li>
+        <li><a href="about.html" class="nav-link">About & SDGs</a></li>
+      </ul>
+
+      <div class="nav-actions" id="nav-user-actions">
+        <!-- Injected dynamically by api.js -->
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 50px; padding-bottom: 70px; display: flex; justify-content: center;">
+    <div style="width: 100%; max-width: 480px;">
+
+      <!-- Header -->
+      <div style="text-align: center; margin-bottom: 28px;">
+        <div style="width: 54px; height: 54px; border-radius: var(--radius-md); background: linear-gradient(135deg, var(--primary-600), var(--accent-cyan)); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: white; font-size: 24px; box-shadow: var(--glow-emerald);">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <h1 style="font-family: var(--font-heading); font-size: 2rem; color: white; margin-bottom: 8px;">
+          Access EcoGuard
+        </h1>
+        <p style="color: var(--text-muted); font-size: 0.92rem;">
+          Sign in to review incident reports, dispatch field squads, or manage marshland conservation actions.
+        </p>
+      </div>
+
+      <!-- Quick Demo Account Fillers -->
+      <div class="card" style="margin-bottom: 20px; padding: 18px;">
+        <div style="font-size: 0.8rem; font-weight: 600; color: var(--primary-400); text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-bolt"></i> Quick Demo Logins (Click to Autofill)
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <button type="button" onclick="quickFill('admin@ecoguard.org', 'admin123')" class="btn btn-secondary btn-sm" style="justify-content: flex-start; text-align: left;">
+            <i class="fa-solid fa-user-gear" style="color: #ef4444;"></i>
+            <span><strong>Wetland Admin Officer</strong> (admin@ecoguard.org)</span>
+          </button>
+          <button type="button" onclick="quickFill('volunteer@ecoguard.org', 'volunteer123')" class="btn btn-secondary btn-sm" style="justify-content: flex-start; text-align: left;">
+            <i class="fa-solid fa-hand-holding-heart" style="color: #10b981;"></i>
+            <span><strong>Eco Volunteer</strong> (volunteer@ecoguard.org)</span>
+          </button>
+          <button type="button" onclick="quickFill('citizen@gmail.com', 'citizen123')" class="btn btn-secondary btn-sm" style="justify-content: flex-start; text-align: left;">
+            <i class="fa-solid fa-user" style="color: #06b6d4;"></i>
+            <span><strong>Citizen Reporter</strong> (citizen@gmail.com)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Login / Signup Card -->
+      <div class="card" style="padding: 30px;">
+        <!-- Tabs -->
+        <div style="display: flex; border-bottom: 1px solid var(--border-glass); margin-bottom: 24px;">
+          <button id="tab-login" onclick="switchAuthTab('login')" style="flex: 1; padding: 10px; background: none; border: none; color: white; font-weight: 600; font-family: var(--font-heading); border-bottom: 2px solid var(--primary-400); cursor: pointer;">
+            Sign In
+          </button>
+          <button id="tab-register" onclick="switchAuthTab('register')" style="flex: 1; padding: 10px; background: none; border: none; color: var(--text-dim); font-weight: 600; font-family: var(--font-heading); border-bottom: 2px solid transparent; cursor: pointer;">
+            New Account
+          </button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="auth-login-form" onsubmit="handleLoginSubmit(event)">
+          <div class="form-group">
+            <label class="form-label" for="login-email">Email Address <span class="req">*</span></label>
+            <input type="email" id="login-email" class="form-control" placeholder="name@domain.com" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="login-password">Password <span class="req">*</span></label>
+            <input type="password" id="login-password" class="form-control" placeholder="••••••••" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="btn-login" style="width: 100%; margin-top: 10px;">
+            <i class="fa-solid fa-right-to-bracket"></i> Sign In to EcoGuard
+          </button>
+        </form>
+
+        <!-- Register Form (Initially Hidden) -->
+        <form id="auth-register-form" onsubmit="handleRegisterSubmit(event)" style="display: none;">
+          <div class="form-group">
+            <label class="form-label" for="reg-name">Full Name <span class="req">*</span></label>
+            <input type="text" id="reg-name" class="form-control" placeholder="e.g. Adarsh S" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-email">Email Address <span class="req">*</span></label>
+            <input type="email" id="reg-email" class="form-control" placeholder="name@domain.com" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-password">Password <span class="req">*</span></label>
+            <input type="password" id="reg-password" class="form-control" placeholder="Minimum 6 characters" minlength="6" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-role">Account Type</label>
+            <select id="reg-role" class="form-control">
+              <option value="CITIZEN">Concerned Citizen</option>
+              <option value="VOLUNTEER">Eco Volunteer / Student</option>
+              <option value="ADMIN">Wetland Authority Official</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="btn-register" style="width: 100%; margin-top: 10px;">
+            <i class="fa-solid fa-user-plus"></i> Create EcoGuard Account
+          </button>
+        </form>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container" style="text-align: center;">
+      <p style="color: var(--text-dim); font-size: 0.85rem;">
+        EcoGuard - Pallikaranai Marshland Waste Management System &bull; Easwari Engineering College Final Project
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script>
+    function quickFill(email, password) {
+      switchAuthTab('login');
+      document.getElementById('login-email').value = email;
+      document.getElementById('login-password').value = password;
+      showToast(`Autofilled credentials for ${email}`);
+    }
+
+    function switchAuthTab(tab) {
+      const loginForm = document.getElementById('auth-login-form');
+      const regForm = document.getElementById('auth-register-form');
+      const tabLogin = document.getElementById('tab-login');
+      const tabReg = document.getElementById('tab-register');
+
+      if (tab === 'login') {
+        loginForm.style.display = 'block';
+        regForm.style.display = 'none';
+        tabLogin.style.color = 'white';
+        tabLogin.style.borderBottomColor = 'var(--primary-400)';
+        tabReg.style.color = 'var(--text-dim)';
+        tabReg.style.borderBottomColor = 'transparent';
+      } else {
+        loginForm.style.display = 'none';
+        regForm.style.display = 'block';
+        tabReg.style.color = 'white';
+        tabReg.style.borderBottomColor = 'var(--primary-400)';
+        tabLogin.style.color = 'var(--text-dim)';
+        tabLogin.style.borderBottomColor = 'transparent';
+      }
+    }
+
+    async function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      const btn = document.getElementById('btn-login');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...';
+
+      try {
+        const res = await EcoGuardAPI.login(email, password);
+        if (res.success) {
+          EcoGuardAPI.setUser({
+            userId: res.userId,
+            name: res.name,
+            email: res.email,
+            role: res.role,
+            token: res.token
+          });
+          showToast(`Welcome back, ${res.name}!`);
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 800);
+        } else {
+          showToast(res.message || 'Invalid credentials', 'error');
+        }
+      } catch (err) {
+        console.error('Login error', err);
+        showToast('Login server error. Please try again.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Sign In to EcoGuard';
+      }
+    }
+
+    async function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const role = document.getElementById('reg-role').value;
+
+      const btn = document.getElementById('btn-register');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Registering...';
+
+      try {
+        const res = await EcoGuardAPI.register(name, email, password, role);
+        if (res.success) {
+          EcoGuardAPI.setUser({
+            userId: res.userId,
+            name: res.name,
+            email: res.email,
+            role: res.role,
+            token: res.token
+          });
+          showToast(`Account created! Welcome to EcoGuard, ${res.name}!`);
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 800);
+        } else {
+          showToast(res.message || 'Registration failed', 'error');
+        }
+      } catch (err) {
+        console.error('Register error', err);
+        showToast('Registration server error. Please try again.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Create EcoGuard Account';
+      }
+    }
+  </script>
+</body>
+</html>

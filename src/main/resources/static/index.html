@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoGuard | Pallikaranai Marshland Waste Management System</title>
+  <meta name="description" content="Digital environmental reporting platform for the protection and sustainable waste management of Pallikaranai Marshland, Chennai.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-leaf"></i>
+        </div>
+        <div>
+          <div class="brand-title">EcoGuard</div>
+          <div class="brand-sub">Pallikaranai Marshland</div>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link active">Home</a></li>
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="report.html" class="nav-link">Report Waste</a></li>
+        <li><a href="about.html" class="nav-link">About & SDGs</a></li>
+      </ul>
+
+      <div class="nav-actions" id="nav-user-actions">
+        <!-- Injected dynamically by api.js -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div style="max-width: 860px;">
+        <div class="hero-tag">
+          <i class="fa-solid fa-feather-pointed"></i>
+          <span>Official Ramsar Wetland Site #2484 Protection System</span>
+        </div>
+        <h1 class="hero-title">
+          Safeguarding Chennai's <span>Pallikaranai Marshland</span> from Illegal Waste
+        </h1>
+        <p class="hero-desc">
+          EcoGuard connects conscious citizens, environmental volunteers, and wetland conservation authorities 
+          to monitor, report, and remediate illegal solid waste dumping, industrial effluents, and habitat threats in real time.
+        </p>
+
+        <div class="hero-cta">
+          <a href="report.html" class="btn btn-primary" id="hero-report-btn">
+            <i class="fa-solid fa-camera"></i> Report Waste Incident
+          </a>
+          <a href="dashboard.html" class="btn btn-secondary" id="hero-dash-btn">
+            <i class="fa-solid fa-chart-line"></i> View Live Dashboard
+          </a>
+          <a href="about.html" class="btn btn-secondary" id="hero-about-btn">
+            <i class="fa-solid fa-circle-info"></i> Project Details
+          </a>
+        </div>
+      </div>
+
+      <!-- Live Statistics Ribbon -->
+      <div class="stat-ribbon" id="hero-stats">
+        <div class="stat-card">
+          <div class="stat-num" id="stat-total">--</div>
+          <div class="stat-label">Total Waste Reports</div>
+          <div class="stat-sub"><i class="fa-solid fa-database"></i> Live Synced from Backend</div>
+        </div>
+        <div class="stat-card stat-pending">
+          <div class="stat-num" id="stat-pending">--</div>
+          <div class="stat-label">Pending Review</div>
+          <div class="stat-sub"><i class="fa-solid fa-clock"></i> Verification Queued</div>
+        </div>
+        <div class="stat-card stat-action">
+          <div class="stat-num" id="stat-progress">--</div>
+          <div class="stat-label">Cleanups In Progress</div>
+          <div class="stat-sub"><i class="fa-solid fa-person-digging"></i> Field Patrol Active</div>
+        </div>
+        <div class="stat-card stat-resolved">
+          <div class="stat-num" id="stat-resolved">--</div>
+          <div class="stat-label">Resolved Incidents</div>
+          <div class="stat-sub" id="stat-rate"><i class="fa-solid fa-circle-check"></i> --% Resolution Rate</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ecological Importance Section -->
+  <section style="padding: 60px 0; background: rgba(255, 255, 255, 0.015); border-top: 1px solid var(--border-glass); border-bottom: 1px solid var(--border-glass);">
+    <div class="container">
+      <div style="text-align: center; max-width: 720px; margin: 0 auto 50px;">
+        <span class="badge badge-submitted" style="margin-bottom: 12px;">CRITICAL CONSERVATION AREA</span>
+        <h2 style="font-family: var(--font-heading); font-size: 2.2rem; margin-bottom: 16px;">
+          Why Pallikaranai Marshland Needs Our Vigilance
+        </h2>
+        <p style="color: var(--text-muted);">
+          Shrunk from over 5,000 hectares to approximately 600 hectares due to rapid urbanization, 
+          Pallikaranai is the only remaining natural freshwater wetland in Chennai.
+        </p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+        <div class="card">
+          <div style="font-size: 32px; color: var(--primary-400); margin-bottom: 16px;">
+            <i class="fa-solid fa-dove"></i>
+          </div>
+          <h3 style="font-family: var(--font-heading); font-size: 1.25rem; margin-bottom: 10px;">115+ Avian Species</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Breeding ground and refuge for migratory birds including Spot-billed Pelicans, Glossy Ibises, and Pheasant-tailed Jacanas threatened by non-biodegradable plastics.
+          </p>
+        </div>
+
+        <div class="card">
+          <div style="font-size: 32px; color: var(--accent-cyan); margin-bottom: 16px;">
+            <i class="fa-solid fa-water"></i>
+          </div>
+          <h3 style="font-family: var(--font-heading); font-size: 1.25rem; margin-bottom: 10px;">Natural Flood Barrier</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Acts as the primary flood sponge for southern Chennai, absorbing monsoon excess from 250 sq km. Debris dumping severely chokes natural drainage culverts.
+          </p>
+        </div>
+
+        <div class="card">
+          <div style="font-size: 32px; color: var(--accent-amber); margin-bottom: 16px;">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </div>
+          <h3 style="font-family: var(--font-heading); font-size: 1.25rem; margin-bottom: 10px;">Leachate & Fire Risks</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Unregulated dumping causes hazardous chemical leachate that permeates the groundwater and triggers summer marshland fires destroying sensitive reed beds.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4-Step Workflow Section -->
+  <section style="padding: 70px 0;">
+    <div class="container">
+      <div style="text-align: center; max-width: 680px; margin: 0 auto 50px;">
+        <span class="badge badge-resolved" style="margin-bottom: 12px;">SYSTEM WORKFLOW</span>
+        <h2 style="font-family: var(--font-heading); font-size: 2.2rem; margin-bottom: 16px;">
+          How EcoGuard Works
+        </h2>
+        <p style="color: var(--text-muted);">
+          A streamlined 4-step pipeline designed in our project architecture to ensure every citizen report translates into accountable ground action.
+        </p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+        <div class="card" style="text-align: center;">
+          <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(16, 185, 129, 0.15); color: var(--primary-400); display: flex; align-items: center; justify-content: center; font-weight: 700; margin: 0 auto 16px; font-size: 1.2rem; border: 1px solid var(--primary-500);">1</div>
+          <h4 style="font-family: var(--font-heading); margin-bottom: 8px;">Identify & Submit</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">
+            Spot waste along Radial Road, Perumbakkam, or Velachery border and log category and location.
+          </p>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); display: flex; align-items: center; justify-content: center; font-weight: 700; margin: 0 auto 16px; font-size: 1.2rem; border: 1px solid var(--accent-cyan);">2</div>
+          <h4 style="font-family: var(--font-heading); margin-bottom: 8px;">Backend Validation</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">
+            Spring Boot REST service validates report data, allocates an incident ID, and records audit trail.
+          </p>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); display: flex; align-items: center; justify-content: center; font-weight: 700; margin: 0 auto 16px; font-size: 1.2rem; border: 1px solid var(--accent-purple);">3</div>
+          <h4 style="font-family: var(--font-heading); margin-bottom: 8px;">Action & Cleanup</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">
+            Wetland patrol officers or volunteer squads review priority and execute cleanup operations.
+          </p>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); display: flex; align-items: center; justify-content: center; font-weight: 700; margin: 0 auto 16px; font-size: 1.2rem; border: 1px solid var(--accent-amber);">4</div>
+          <h4 style="font-family: var(--font-heading); margin-bottom: 8px;">Verified Closure</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">
+            Status changes to 'Resolved' with comments; dashboard metrics update instantly.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Reports Feed Preview -->
+  <section style="padding: 60px 0; background: rgba(16, 24, 39, 0.4); border-top: 1px solid var(--border-glass);">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <span class="badge badge-in-progress" style="margin-bottom: 8px;">LIVE DISPATCH MONITOR</span>
+          <h2 style="font-family: var(--font-heading); font-size: 2rem;">Recent Marshland Incident Reports</h2>
+        </div>
+        <a href="dashboard.html" class="btn btn-secondary btn-sm">
+          View All on Dashboard <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <div id="recent-reports-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+        <div style="text-align: center; padding: 40px; color: var(--text-muted); grid-column: 1 / -1;">
+          <i class="fa-solid fa-circle-notch fa-spin fa-2x"></i>
+          <p style="margin-top: 12px;">Loading recent waste reports from backend...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SDG Alignment Banner -->
+  <section style="padding: 60px 0; border-top: 1px solid var(--border-glass);">
+    <div class="container">
+      <div style="background: linear-gradient(135deg, rgba(6, 78, 59, 0.5), rgba(15, 23, 42, 0.8)); border: 1px solid var(--border-glass); border-radius: var(--radius-lg); padding: 40px; display: flex; align-items: center; justify-content: space-between; gap: 30px; flex-wrap: wrap;">
+        <div style="max-width: 600px;">
+          <span class="badge badge-resolved" style="margin-bottom: 12px;">GLOBAL SUSTAINABILITY GOALS</span>
+          <h3 style="font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 14px;">Advancing UN Sustainable Development Goals</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+            EcoGuard directly drives <strong>SDG 11</strong> (Sustainable Cities & Communities), 
+            <strong>SDG 12</strong> (Responsible Consumption & Proper Waste Segregation), and 
+            <strong>SDG 15</strong> (Life on Land: Wetland Ecosystem Preservation).
+          </p>
+        </div>
+        <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+          <div style="background: #e5243b; color: white; padding: 14px 20px; border-radius: var(--radius-md); font-weight: 700; font-family: var(--font-heading); text-align: center;">
+            <div style="font-size: 1.3rem;">SDG 11</div>
+            <div style="font-size: 0.75rem; text-transform: uppercase;">Sustainable Cities</div>
+          </div>
+          <div style="background: #bf8b2e; color: white; padding: 14px 20px; border-radius: var(--radius-md); font-weight: 700; font-family: var(--font-heading); text-align: center;">
+            <div style="font-size: 1.3rem;">SDG 12</div>
+            <div style="font-size: 0.75rem; text-transform: uppercase;">Responsible Disposal</div>
+          </div>
+          <div style="background: #56c02b; color: white; padding: 14px 20px; border-radius: var(--radius-md); font-weight: 700; font-family: var(--font-heading); text-align: center;">
+            <div style="font-size: 1.3rem;">SDG 15</div>
+            <div style="font-size: 0.75rem; text-transform: uppercase;">Life on Land</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; margin-bottom: 24px;">
+        <div class="brand">
+          <div class="brand-icon" style="width: 32px; height: 32px; font-size: 16px;">
+            <i class="fa-solid fa-leaf"></i>
+          </div>
+          <div>
+            <div class="brand-title" style="font-size: 1.1rem;">EcoGuard</div>
+            <div class="brand-sub" style="font-size: 0.68rem;">Pallikaranai Marshland System</div>
+          </div>
+        </div>
+
+        <div style="color: var(--text-muted); font-size: 0.88rem;">
+          Developed as B.Tech Final Project by <strong>Adarsh S</strong> & <strong>Abhinav Roopesh</strong><br>
+          Department of AI & Data Science, Easwari Engineering College (Autonomous), Anna University
+        </div>
+      </div>
+
+      <div style="text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 20px; font-size: 0.82rem; color: var(--text-dim);">
+        &copy; 2026 EcoGuard. Dedicated to the conservation of Ramsar Wetland Site #2484 Pallikaranai, Chennai.
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script>
+    // Load dynamic metrics on homepage
+    async function loadHomeMetrics() {
+      try {
+        const res = await EcoGuardAPI.getDashboardSummary();
+        if (res.success && res.data) {
+          const d = res.data;
+          document.getElementById('stat-total').textContent = d.totalReports;
+          document.getElementById('stat-pending').textContent = d.submittedReports + d.underReviewReports;
+          document.getElementById('stat-progress').textContent = d.inProgressReports;
+          document.getElementById('stat-resolved').textContent = d.resolvedReports;
+          document.getElementById('stat-rate').innerHTML = `<i class="fa-solid fa-circle-check"></i> ${d.resolutionRatePercentage}% Resolution Rate`;
+        }
+      } catch (e) {
+        console.error('Failed to load summary stats', e);
+      }
+    }
+
+    // Load recent reports for preview
+    async function loadRecentReports() {
+      const grid = document.getElementById('recent-reports-grid');
+      try {
+        const res = await EcoGuardAPI.getReports();
+        if (res.success && res.data && res.data.length > 0) {
+          const recent = res.data.slice(0, 3);
+          grid.innerHTML = recent.map(r => {
+            const statusClass = 'badge-' + (r.status ? r.status.toLowerCase().replace('_', '-') : 'submitted');
+            const severityClass = 'badge-' + (r.severity ? r.severity.toLowerCase() : 'medium');
+            return `
+              <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                  <span class="badge ${statusClass}">${r.status.replace('_', ' ')}</span>
+                  <span class="badge ${severityClass}">${r.severity} Priority</span>
+                </div>
+                <h4 style="font-family: var(--font-heading); margin-bottom: 8px; font-size: 1.15rem; color: #fff;">
+                  ${r.category}
+                </h4>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 14px; line-height: 1.5;">
+                  ${r.description.length > 130 ? r.description.substring(0, 130) + '...' : r.description}
+                </p>
+                <div style="border-top: 1px solid var(--border-glass); padding-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; color: var(--primary-300);">
+                  <span><i class="fa-solid fa-location-dot"></i> ${r.location.length > 25 ? r.location.substring(0, 25) + '...' : r.location}</span>
+                  <a href="dashboard.html" style="color: var(--primary-400); text-decoration: none; font-weight: 600;">Details &rarr;</a>
+                </div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          grid.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted); grid-column: 1 / -1;">No reports found.</div>';
+        }
+      } catch (e) {
+        console.error('Failed to load reports', e);
+        grid.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted); grid-column: 1 / -1;">Could not connect to backend service.</div>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadHomeMetrics();
+      loadRecentReports();
+    });
+  </script>
+</body>
+</html>

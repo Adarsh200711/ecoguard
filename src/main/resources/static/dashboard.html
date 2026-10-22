@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoGuard | Live Monitoring Dashboard</title>
+  <meta name="description" content="Real-time waste reporting analytics, category distribution, and incident status management for Pallikaranai Marshland.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-leaf"></i>
+        </div>
+        <div>
+          <div class="brand-title">EcoGuard</div>
+          <div class="brand-sub">Pallikaranai Marshland</div>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="dashboard.html" class="nav-link active">Dashboard</a></li>
+        <li><a href="report.html" class="nav-link">Report Waste</a></li>
+        <li><a href="about.html" class="nav-link">About & SDGs</a></li>
+      </ul>
+
+      <div class="nav-actions" id="nav-user-actions">
+        <!-- Injected dynamically by api.js -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Dashboard Container -->
+  <main class="container" style="padding-top: 30px; padding-bottom: 60px;">
+
+    <!-- Dashboard Header -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+      <div>
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+          <span class="badge badge-resolved"><i class="fa-solid fa-database"></i> LIVE DATABASE SYNCHRONIZED</span>
+          <span style="font-size: 0.82rem; color: var(--text-muted);" id="last-updated-time">Updated: Just now</span>
+        </div>
+        <h1 style="font-family: var(--font-heading); font-size: 2.2rem; color: var(--text-main);">
+          Pallikaranai Waste Monitoring Dashboard
+        </h1>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button onclick="refreshDashboard()" class="btn btn-secondary btn-sm" id="btn-refresh">
+          <i class="fa-solid fa-arrows-rotate"></i> Refresh Data
+        </button>
+        <a href="report.html" class="btn btn-primary btn-sm">
+          <i class="fa-solid fa-plus"></i> New Incident Report
+        </a>
+      </div>
+    </div>
+
+    <!-- Citizen Completion Notification Banner -->
+    <div id="citizen-completion-notifications" style="display: none; margin-bottom: 24px;"></div>
+
+    <!-- KPI Summary Cards -->
+    <div class="stat-ribbon" style="margin-top: 0; margin-bottom: 30px;">
+      <div class="stat-card">
+        <div class="stat-num" id="kpi-total">0</div>
+        <div class="stat-label">Total Reports Logged</div>
+        <div class="stat-sub"><i class="fa-solid fa-server"></i> Live database query count</div>
+      </div>
+      <div class="stat-card stat-pending">
+        <div class="stat-num" id="kpi-submitted">0</div>
+        <div class="stat-label">Submitted / Unreviewed</div>
+        <div class="stat-sub"><i class="fa-solid fa-hourglass-start"></i> Awaiting inspection</div>
+      </div>
+      <div class="stat-card stat-action">
+        <div class="stat-num" id="kpi-progress">0</div>
+        <div class="stat-label">Active Field Cleanups</div>
+        <div class="stat-sub"><i class="fa-solid fa-person-digging"></i> Teams dispatched</div>
+      </div>
+      <div class="stat-card stat-resolved">
+        <div class="stat-num" id="kpi-resolved">0</div>
+        <div class="stat-label">Resolved & Remediated</div>
+        <div class="stat-sub" id="kpi-resolution-rate"><i class="fa-solid fa-circle-check"></i> 0% Resolution Rate</div>
+      </div>
+    </div>
+
+    <!-- Analytics Breakdown: Category & Zones -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px; margin-bottom: 32px;">
+      <!-- Category Distribution Card -->
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.15rem; color: var(--text-main);">
+            <i class="fa-solid fa-chart-pie" style="color: var(--primary-600); margin-right: 8px;"></i>
+            Waste Category Distribution
+          </h3>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Actual counts</span>
+        </div>
+        <div id="category-progress-container" style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="color: var(--text-muted); font-size: 0.9rem;">Loading category statistics...</div>
+        </div>
+      </div>
+
+      <!-- Sector / Zone Density Card -->
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.15rem; color: var(--text-main);">
+            <i class="fa-solid fa-map-location-dot" style="color: var(--accent-cyan); margin-right: 8px;"></i>
+            Marshland Sector Incident Heat
+          </h3>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Zones A through E</span>
+        </div>
+        <div id="zone-progress-container" style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="color: var(--text-muted); font-size: 0.9rem;">Loading sector statistics...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter and Search Toolbar -->
+    <div class="card" style="margin-bottom: 24px; padding: 18px 24px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; align-items: center;">
+        
+        <div>
+          <label class="form-label" style="font-size: 0.8rem; margin-bottom: 4px;">Search Keyword</label>
+          <div style="position: relative;">
+            <input type="text" id="filter-search" class="form-control" placeholder="Search location, description..." style="padding-left: 36px;">
+            <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-dim); font-size: 0.85rem;"></i>
+          </div>
+        </div>
+
+        <div>
+          <label class="form-label" style="font-size: 0.8rem; margin-bottom: 4px;">Filter by Status</label>
+          <select id="filter-status" class="form-control">
+            <option value="ALL">All Statuses</option>
+            <option value="SUBMITTED">Submitted</option>
+            <option value="UNDER_REVIEW">Under Review</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="RESOLVED">Resolved</option>
+            <option value="REJECTED">Rejected</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="form-label" style="font-size: 0.8rem; margin-bottom: 4px;">Filter by Category</label>
+          <select id="filter-category" class="form-control">
+            <option value="ALL">All Categories</option>
+            <option value="Plastic Waste">Plastic Waste</option>
+            <option value="Industrial Runoff">Industrial Runoff</option>
+            <option value="Electronic Waste">Electronic Waste</option>
+            <option value="Bio / Organic Waste">Bio / Organic Waste</option>
+            <option value="Construction Debris">Construction Debris</option>
+            <option value="General Solid Waste">General Solid Waste</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="form-label" style="font-size: 0.8rem; margin-bottom: 4px;">Filter by Sector / Zone</label>
+          <select id="filter-zone" class="form-control">
+            <option value="ALL">All Sectors</option>
+            <option value="Zone A - Radial Road Corridor">Zone A - Radial Road Corridor</option>
+            <option value="Zone B - Velachery MRTS Edge">Zone B - Velachery MRTS Edge</option>
+            <option value="Zone C - Perumbakkam Boundary">Zone C - Perumbakkam Boundary</option>
+            <option value="Zone D - Medavakkam Lake Inlet">Zone D - Medavakkam Lake Inlet</option>
+            <option value="Zone E - Sholinganallur Radial Link">Zone E - Sholinganallur Radial Link</option>
+          </select>
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-top: 20px;">
+          <button onclick="applyFilters()" class="btn btn-primary btn-sm" style="flex: 1;">
+            <i class="fa-solid fa-filter"></i> Filter
+          </button>
+          <button onclick="resetFilters()" class="btn btn-secondary btn-sm" title="Clear Filters">
+            <i class="fa-solid fa-rotate-left"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Reports Data Table -->
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Date & Time</th>
+            <th>Sector & Location</th>
+            <th>Waste Category</th>
+            <th>Urgency</th>
+            <th>Status</th>
+            <th>Reporter</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="reports-table-body">
+          <tr>
+            <td colspan="8" style="text-align: center; padding: 40px; color: var(--text-muted);">
+              <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+              <div style="margin-top: 10px;">Retrieving records from backend database...</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <!-- Modal: Report Details & Audit History -->
+  <div class="modal-overlay" id="modal-details">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-details-title">Incident Details</h3>
+        <button class="modal-close" onclick="closeModal('modal-details')">&times;</button>
+      </div>
+      <div id="modal-details-body">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Update Report Status -->
+  <div class="modal-overlay" id="modal-status">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Update Report Status</h3>
+        <button class="modal-close" onclick="closeModal('modal-status')">&times;</button>
+      </div>
+      <form id="form-update-status" onsubmit="handleStatusSubmit(event)">
+        <input type="hidden" id="update-report-id">
+
+        <div id="modal-role-notice" style="display: none; padding: 12px 16px; border-radius: var(--radius-sm); font-size: 0.88rem; margin-bottom: 18px; line-height: 1.5; background: var(--primary-50); border: 1px solid var(--primary-200); color: var(--primary-800);"></div>
+
+        <div class="form-group">
+          <label class="form-label">New Status <span class="req">*</span></label>
+          <select id="update-new-status" class="form-control" required>
+            <option value="SUBMITTED">Submitted (Pending Review)</option>
+            <option value="UNDER_REVIEW">Under Review (Inspection Scheduled)</option>
+            <option value="IN_PROGRESS">In Progress (Field Patrol / Cleanup Active)</option>
+            <option value="RESOLVED">Resolved (Remediation Complete)</option>
+            <option value="REJECTED">Rejected (Duplicate / Unverified)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Updated By (Officer / Volunteer Name)</label>
+          <input type="text" id="update-by-name" class="form-control" placeholder="e.g. Wetland Patrol Team A" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Action Notes / Remediation Comment <span class="req">*</span></label>
+          <textarea id="update-comment" class="form-control" placeholder="Detail actions taken or status reasoning..." required></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-status')">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-status">
+            <i class="fa-solid fa-floppy-disk"></i> Save & Log Status
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container" style="text-align: center;">
+      <p style="color: var(--text-dim); font-size: 0.85rem;">
+        EcoGuard - Pallikaranai Marshland Waste Management System &bull; Easwari Engineering College Final Project
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script>
+    let allReports = [];
+
+    
+    async function loadDashboardData() {
+      try {
+        // Citizen completion notifications check
+        const user = EcoGuardAPI.getUser();
+        const notifContainer = document.getElementById('citizen-completion-notifications');
+        if (notifContainer) {
+          const userEmail = (user && user.email) ? user.email : '';
+          const notifRes = await EcoGuardAPI.getCitizenNotifications(userEmail);
+          if (notifRes.success && notifRes.data && notifRes.data.length > 0) {
+            const resolvedReports = notifRes.data.filter(r => r.status === 'RESOLVED');
+            if (resolvedReports.length > 0) {
+              notifContainer.style.display = 'block';
+              notifContainer.innerHTML = resolvedReports.slice(0, 3).map(r => `
+                <div class="alert-completion">
+                  <div class="alert-icon"><i class="fa-solid fa-circle-check"></i></div>
+                  <div class="alert-content">
+                    <div class="alert-title">🎉 Citizen Resolution Alert: Report #${r.id} Marked Completed!</div>
+                    <div class="alert-desc">Your waste report for <strong>${r.category}</strong> at <em>${r.location}</em> has been remediated and officially marked <strong>RESOLVED</strong> by the Wetland Authority. Thank you for safeguarding Pallikaranai Marshland!</div>
+                  </div>
+                  <button class="alert-dismiss" onclick="this.parentElement.remove()" title="Dismiss">&times;</button>
+                </div>
+              `).join('');
+            } else {
+              notifContainer.style.display = 'none';
+            }
+          }
+        }
+
+        // Load KPI Summary
+        const sumRes = await EcoGuardAPI.getDashboardSummary();
+        if (sumRes.success && sumRes.data) {
+          const s = sumRes.data;
+          document.getElementById('kpi-total').textContent = s.totalReports;
+          document.getElementById('kpi-submitted').textContent = s.submittedReports;
+          document.getElementById('kpi-progress').textContent = s.inProgressReports;
+          document.getElementById('kpi-resolved').textContent = s.resolvedReports;
+          document.getElementById('kpi-resolution-rate').innerHTML = `<i class="fa-solid fa-circle-check"></i> ${s.resolutionRatePercentage}% Resolution Rate`;
+
+          // Render Category Progress Bars
+          renderProgressBars('category-progress-container', s.categoryCounts, s.totalReports, '#059669');
+          // Render Zone Progress Bars
+          renderProgressBars('zone-progress-container', s.zoneCounts, s.totalReports, '#0284c7');
+        }
+
+        // Load Reports Table
+        await applyFilters();
+        document.getElementById('last-updated-time').textContent = 'Updated: ' + new Date().toLocaleTimeString();
+      } catch (e) {
+        console.error('Failed to load dashboard data', e);
+        showToast('Error loading dashboard data from backend', 'error');
+      }
+    }
+
+    function renderProgressBars(containerId, dataMap, total, color) {
+      const container = document.getElementById(containerId);
+      if (!dataMap || Object.keys(dataMap).length === 0 || total === 0) {
+        container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.85rem;">No data points in database yet.</div>';
+        return;
+      }
+
+      container.innerHTML = Object.entries(dataMap).map(([key, count]) => {
+        const pct = Math.round((count / total) * 100);
+        return `
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px;">
+              <span style="color: var(--text-main); font-weight: 600;">${key}</span>
+              <span style="color: var(--text-muted); font-weight: 500;">${count} (${pct}%)</span>
+            </div>
+            <div style="width: 100%; height: 7px; background: #e2e8f0; border-radius: 999px; overflow: hidden;">
+              <div style="width: ${pct}%; height: 100%; background: ${color}; border-radius: 999px; transition: width 0.5s ease;"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function applyFilters() {
+      const search = document.getElementById('filter-search').value;
+      const status = document.getElementById('filter-status').value;
+      const category = document.getElementById('filter-category').value;
+      const zone = document.getElementById('filter-zone').value;
+
+      const res = await EcoGuardAPI.getReports({ search, status, category, zone });
+      const tbody = document.getElementById('reports-table-body');
+
+      const user = EcoGuardAPI.getUser();
+      const isCitizen = user && user.role === 'CITIZEN';
+      const isVolunteer = user && user.role === 'VOLUNTEER';
+
+      if (res.success && res.data && res.data.length > 0) {
+        allReports = res.data;
+        tbody.innerHTML = res.data.map(r => {
+          const statusClass = 'badge-' + (r.status ? r.status.toLowerCase().replace('_', '-') : 'submitted');
+          const severityClass = 'badge-' + (r.severity ? r.severity.toLowerCase() : 'medium');
+          const dateStr = r.createdAt ? new Date(r.createdAt).toLocaleString(undefined, {
+            month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+          }) : 'N/A';
+          const hasPhoto = !!r.imageUrl;
+
+          const actionHtml = isCitizen ? `
+            <button onclick="viewReportDetails(${r.id})" class="btn btn-secondary btn-sm" title="View Full Report & History">
+              <i class="fa-solid fa-eye"></i> Details
+            </button>
+          ` : `
+            <div style="display: flex; gap: 6px;">
+              <button onclick="viewReportDetails(${r.id})" class="btn btn-secondary btn-sm" title="View Full Report & History">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+              <button onclick="openStatusModal(${r.id}, '${r.status}')" class="btn btn-primary btn-sm" title="${isVolunteer ? 'Send Cleanup Update to Admin' : 'Update Status'}">
+                <i class="fa-solid fa-pen-to-square"></i> ${isVolunteer ? 'Action' : 'Update'}
+              </button>
+            </div>
+          `;
+
+          return `
+            <tr>
+              <td><strong>#${r.id}</strong></td>
+              <td style="color: var(--text-muted); font-size: 0.85rem;">${dateStr}</td>
+              <td>
+                <div style="font-weight: 600; color: var(--text-main);">${r.zone || 'Pallikaranai'}</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">${r.location}</div>
+              </td>
+              <td>
+                <span style="font-weight: 600; color: var(--primary-700);">${r.category}</span>
+                ${hasPhoto ? '<span title="Photo Attached" style="color: var(--accent-cyan); margin-left: 6px;"><i class="fa-solid fa-camera"></i></span>' : ''}
+              </td>
+              <td><span class="badge ${severityClass}">${r.severity || 'MEDIUM'}</span></td>
+              <td><span class="badge ${statusClass}">${r.status ? r.status.replace('_', ' ') : 'SUBMITTED'}</span></td>
+              <td style="font-size: 0.85rem; color: var(--text-muted);">${r.reporterName || 'Anonymous'}</td>
+              <td>${actionHtml}</td>
+            </tr>
+          `;
+        }).join('');
+      } else {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align: center; padding: 40px; color: var(--text-muted);">
+              No reports match your selected criteria in the database.
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    function resetFilters() {
+      document.getElementById('filter-search').value = '';
+      document.getElementById('filter-status').value = 'ALL';
+      document.getElementById('filter-category').value = 'ALL';
+      document.getElementById('filter-zone').value = 'ALL';
+      applyFilters();
+    }
+
+    async function viewReportDetails(id) {
+      try {
+        const repRes = await EcoGuardAPI.getReportById(id);
+        const histRes = await EcoGuardAPI.getReportHistory(id);
+
+        if (!repRes.success || !repRes.data) {
+          showToast('Failed to retrieve report details', 'error');
+          return;
+        }
+
+        const r = repRes.data;
+        const history = histRes.data || [];
+
+        const statusClass = 'badge-' + r.status.toLowerCase().replace('_', '-');
+        const severityClass = 'badge-' + (r.severity ? r.severity.toLowerCase() : 'medium');
+
+        let historyHtml = '<div style="margin-top: 20px;"><h4 style="font-family: var(--font-heading); margin-bottom: 12px; font-size: 1.05rem;">Status Audit History</h4>';
+        if (history.length > 0) {
+          historyHtml += '<div style="display: flex; flex-direction: column; gap: 10px; border-left: 2px solid var(--primary-700); padding-left: 14px;">';
+          history.forEach(h => {
+            const hDate = new Date(h.updatedAt).toLocaleString();
+            historyHtml += `
+              <div style="background: rgba(255,255,255,0.03); padding: 10px 14px; border-radius: 8px;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--primary-400); margin-bottom: 4px;">
+                  <span><strong>${h.newStatus}</strong> by ${h.updatedBy || 'System'}</span>
+                  <span>${hDate}</span>
+                </div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">${h.comment || 'No comment provided.'}</div>
+              </div>
+            `;
+          });
+          historyHtml += '</div>';
+        } else {
+          historyHtml += '<p style="color: var(--text-dim); font-size: 0.85rem;">No history events recorded yet.</p>';
+        }
+        historyHtml += '</div>';
+
+        const photoHtml = r.imageUrl ? `
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 6px;">Photographic Evidence</div>
+            <img src="${r.imageUrl}" alt="Waste Evidence" style="max-width: 100%; max-height: 280px; border-radius: 8px; border: 1px solid var(--border-glass); object-fit: cover;">
+          </div>
+        ` : '';
+
+        document.getElementById('modal-details-title').textContent = `Report #${r.id} - ${r.category}`;
+        document.getElementById('modal-details-body').innerHTML = `
+          <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+            <span class="badge ${statusClass}">${r.status.replace('_', ' ')}</span>
+            <span class="badge ${severityClass}">${r.severity} Priority</span>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase;">Location & Sector</div>
+            <div style="font-size: 1rem; color: white; font-weight: 500;">${r.zone} &bull; ${r.location}</div>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase;">Description</div>
+            <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; background: rgba(0,0,0,0.25); padding: 12px; border-radius: 8px; border: 1px solid var(--border-glass);">
+              ${r.description}
+            </p>
+          </div>
+
+          ${photoHtml}
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; font-size: 0.88rem;">
+            <div>
+              <span style="color: var(--text-dim);">Reporter:</span>
+              <span style="color: white; margin-left: 6px;">${r.reporterName || 'Anonymous'}</span>
+            </div>
+            <div>
+              <span style="color: var(--text-dim);">Contact:</span>
+              <span style="color: white; margin-left: 6px;">${r.reporterEmail || r.reporterPhone || 'Not provided'}</span>
+            </div>
+          </div>
+
+          ${historyHtml}
+
+          <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
+            <button onclick="closeModal('modal-details'); openStatusModal(${r.id}, '${r.status}')" class="btn btn-primary btn-sm">
+              <i class="fa-solid fa-pen-to-square"></i> Change Status
+            </button>
+            <button onclick="closeModal('modal-details')" class="btn btn-secondary btn-sm">Close</button>
+          </div>
+        `;
+
+        openModal('modal-details');
+      } catch (e) {
+        console.error('Error viewing report details', e);
+      }
+    }
+
+    function openStatusModal(id, currentStatus) {
+      document.getElementById('update-report-id').value = id;
+      document.getElementById('update-new-status').value = currentStatus;
+      const user = EcoGuardAPI.getUser();
+      document.getElementById('update-by-name').value = user ? `${user.name} (${user.role})` : 'Wetland Patrol Team';
+      document.getElementById('update-comment').value = '';
+      openModal('modal-status');
+    }
+
+    async function handleStatusSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById('update-report-id').value;
+      const status = document.getElementById('update-new-status').value;
+      const updatedBy = document.getElementById('update-by-name').value;
+      const comment = document.getElementById('update-comment').value;
+
+      try {
+        const btn = document.getElementById('btn-save-status');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+
+        const user = EcoGuardAPI.getUser();
+
+        const res = await EcoGuardAPI.updateReportStatus(
+          id, status, updatedBy, comment, user ? user.role : null
+        );
+        if (res.success) {
+          showToast(`Report #${id} status updated to ${status}!`);
+          closeModal('modal-status');
+          await loadDashboardData();
+        } else {
+          showToast(res.message || 'Failed to update status', 'error');
+        }
+      } catch (err) {
+        showToast('Error updating report status', 'error');
+      } finally {
+        const btn = document.getElementById('btn-save-status');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save & Log Status';
+      }
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    function refreshDashboard() {
+      const btn = document.getElementById('btn-refresh');
+      btn.innerHTML = '<i class="fa-solid fa-arrows-rotate fa-spin"></i> Refreshing...';
+      loadDashboardData().finally(() => {
+        btn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> Refresh Data';
+        showToast('Dashboard data refreshed');
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadDashboardData();
+
+      // Enter key trigger for search
+      document.getElementById('filter-search').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') applyFilters();
+      });
+    });
+  </script>
+</body>
+</html>

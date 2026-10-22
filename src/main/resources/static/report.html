@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoGuard | Report Waste Incident</title>
+  <meta name="description" content="Report illegal waste dumping, plastic pollution, or industrial runoff in Pallikaranai Marshland.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-leaf"></i>
+        </div>
+        <div>
+          <div class="brand-title">EcoGuard</div>
+          <div class="brand-sub">Pallikaranai Marshland</div>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="report.html" class="nav-link active">Report Waste</a></li>
+        <li><a href="about.html" class="nav-link">About & SDGs</a></li>
+      </ul>
+
+      <div class="nav-actions" id="nav-user-actions">
+        <!-- Injected dynamically by api.js -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Report Form Container -->
+  <main class="container" style="padding-top: 40px; padding-bottom: 70px; max-width: 860px;">
+    
+    <div style="text-align: center; margin-bottom: 36px;">
+      <span class="badge badge-submitted" style="margin-bottom: 10px;">
+        <i class="fa-solid fa-triangle-exclamation"></i> CITIZEN & VOLUNTEER ACTION
+      </span>
+      <h1 style="font-family: var(--font-heading); font-size: 2.4rem; color: white; margin-bottom: 12px;">
+        Report a Waste Incident
+      </h1>
+      <p style="color: var(--text-muted); font-size: 1rem; max-width: 600px; margin: 0 auto;">
+        Your report directly alerts wetland rangers and volunteer cleanup crews. 
+        Accurate category and location details ensure rapid field remediation.
+      </p>
+    </div>
+
+    <div class="card" style="padding: 36px;">
+      <form id="waste-report-form" onsubmit="handleReportSubmit(event)">
+
+        <!-- Step 1: Waste Category -->
+        <div style="margin-bottom: 28px;">
+          <label class="form-label">
+            1. Select Waste Category <span class="req">*</span>
+          </label>
+          <input type="hidden" id="report-category" value="Plastic Waste" required>
+
+          <div class="category-grid" id="category-selector-grid">
+            <div class="category-card selected" onclick="selectCategory('Plastic Waste', this)">
+              <div class="category-icon"><i class="fa-solid fa-bottle-water"></i></div>
+              <div class="category-name">Plastic Waste</div>
+            </div>
+
+            <div class="category-card" onclick="selectCategory('Industrial Runoff', this)">
+              <div class="category-icon" style="color: var(--accent-red);"><i class="fa-solid fa-industry"></i></div>
+              <div class="category-name">Industrial Runoff</div>
+            </div>
+
+            <div class="category-card" onclick="selectCategory('Electronic Waste', this)">
+              <div class="category-icon" style="color: var(--accent-cyan);"><i class="fa-solid fa-microchip"></i></div>
+              <div class="category-name">Electronic Waste</div>
+            </div>
+
+            <div class="category-card" onclick="selectCategory('Bio / Organic Waste', this)">
+              <div class="category-icon" style="color: #4ade80;"><i class="fa-solid fa-leaf"></i></div>
+              <div class="category-name">Bio / Organic Waste</div>
+            </div>
+
+            <div class="category-card" onclick="selectCategory('Construction Debris', this)">
+              <div class="category-icon" style="color: var(--accent-amber);"><i class="fa-solid fa-trowel-bricks"></i></div>
+              <div class="category-name">Construction Debris</div>
+            </div>
+
+            <div class="category-card" onclick="selectCategory('General Solid Waste', this)">
+              <div class="category-icon" style="color: #94a3b8;"><i class="fa-solid fa-trash-can"></i></div>
+              <div class="category-name">General Garbage</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Marshland Sector & Location -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-bottom: 24px;">
+          <div>
+            <label class="form-label" for="report-zone">
+              2. Marshland Sector / Zone <span class="req">*</span>
+            </label>
+            <select id="report-zone" class="form-control" required>
+              <option value="Zone A - Radial Road Corridor">Zone A - Radial Road Corridor (200 Ft Road)</option>
+              <option value="Zone B - Velachery MRTS Edge">Zone B - Velachery MRTS Terminal Edge</option>
+              <option value="Zone C - Perumbakkam Boundary">Zone C - Perumbakkam Wetland Boundary</option>
+              <option value="Zone D - Medavakkam Lake Inlet">Zone D - Medavakkam Lake Inlet & Bypass</option>
+              <option value="Zone E - Sholinganallur Radial Link">Zone E - Sholinganallur Radial Link</option>
+            </select>
+          </div>
+
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <label class="form-label" for="report-location" style="margin-bottom: 0;">
+                Specific Landmark / Spot <span class="req">*</span>
+              </label>
+              <button type="button" onclick="autoFillGPS()" style="background: none; border: none; color: var(--primary-400); font-size: 0.78rem; cursor: pointer;">
+                <i class="fa-solid fa-location-crosshairs"></i> Pinpoint GPS
+              </button>
+            </div>
+            <input type="text" id="report-location" class="form-control" placeholder="e.g. Near Flyover Pillar #18, close to water channel" required>
+          </div>
+        </div>
+
+        <!-- Step 3: Urgency Level -->
+        <div class="form-group">
+          <label class="form-label">
+            3. Urgency / Threat Severity <span class="req">*</span>
+          </label>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px;">
+            <label style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); padding: 12px; border-radius: var(--radius-md); cursor: pointer; display: flex; align-items: center; gap: 8px;">
+              <input type="radio" name="severity" value="LOW" style="accent-color: var(--primary-500);">
+              <span class="badge badge-low">Low</span>
+            </label>
+            <label style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); padding: 12px; border-radius: var(--radius-md); cursor: pointer; display: flex; align-items: center; gap: 8px;">
+              <input type="radio" name="severity" value="MEDIUM" checked style="accent-color: var(--primary-500);">
+              <span class="badge badge-medium">Medium</span>
+            </label>
+            <label style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); padding: 12px; border-radius: var(--radius-md); cursor: pointer; display: flex; align-items: center; gap: 8px;">
+              <input type="radio" name="severity" value="HIGH" style="accent-color: var(--primary-500);">
+              <span class="badge badge-high">High</span>
+            </label>
+            <label style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); padding: 12px; border-radius: var(--radius-md); cursor: pointer; display: flex; align-items: center; gap: 8px;">
+              <input type="radio" name="severity" value="CRITICAL" style="accent-color: var(--accent-red);">
+              <span class="badge badge-critical">Critical</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Step 4: Description -->
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <label class="form-label" for="report-description" style="margin-bottom: 0;">
+              4. Incident Description & Observation <span class="req">*</span>
+            </label>
+            <span id="char-counter" style="font-size: 0.78rem; color: var(--text-dim);">0 / 2000 chars (min 10)</span>
+          </div>
+          <textarea id="report-description" class="form-control" rows="4" 
+            placeholder="Describe what waste you observed, estimated volume (e.g. 2 bags, 1 truckload), whether water channel is blocked, and any odor or visible burning..." required></textarea>
+        </div>
+
+        <!-- Step 5: Optional Photo Upload -->
+        <div class="form-group">
+          <label class="form-label">
+            5. Attach Photo Evidence (Optional)
+          </label>
+          <div style="border: 2px dashed var(--border-glass); border-radius: var(--radius-md); padding: 24px; text-align: center; background: rgba(0,0,0,0.2); cursor: pointer;" onclick="document.getElementById('file-input').click()">
+            <i class="fa-solid fa-cloud-arrow-up" style="font-size: 32px; color: var(--primary-400); margin-bottom: 8px;"></i>
+            <div style="font-weight: 500; font-size: 0.95rem; color: #fff;">Click to select photo (JPG, PNG, WebP)</div>
+            <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 4px;">Safely uploaded and permanently linked to the record (Max 10MB)</div>
+            <input type="file" id="file-input" style="display: none;" accept="image/jpeg,image/png,image/webp" onchange="previewImage(this)">
+          </div>
+          <div id="image-preview-container" style="display: none; margin-top: 12px; align-items: center; gap: 12px; background: rgba(255,255,255,0.05); padding: 8px 14px; border-radius: 8px;">
+            <i class="fa-solid fa-image" style="color: var(--primary-400);"></i>
+            <span id="preview-filename" style="font-size: 0.85rem; color: white; flex: 1;"></span>
+            <button type="button" onclick="removeImage()" style="background: none; border: none; color: #f87171; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+        </div>
+
+        <!-- Step 6: Reporter Information -->
+        <div style="border-top: 1px solid var(--border-glass); padding-top: 24px; margin-top: 28px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h4 style="font-family: var(--font-heading); font-size: 1.1rem; color: white;">Reporter Information</h4>
+            <label style="font-size: 0.85rem; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 6px;">
+              <input type="checkbox" id="toggle-anonymous" onchange="handleAnonymousToggle(this)" style="accent-color: var(--primary-500);">
+              Report Anonymously
+            </label>
+          </div>
+
+          <div id="reporter-fields" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+            <div>
+              <label class="form-label" for="report-name">Your Full Name</label>
+              <input type="text" id="report-name" class="form-control" placeholder="e.g. Adarsh S">
+            </div>
+            <div>
+              <label class="form-label" for="report-email">Email Address</label>
+              <input type="email" id="report-email" class="form-control" placeholder="e.g. adarsh@gmail.com">
+            </div>
+            <div>
+              <label class="form-label" for="report-phone">Phone Number</label>
+              <input type="tel" id="report-phone" class="form-control" placeholder="e.g. +91 98400 12345">
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div style="margin-top: 32px; display: flex; justify-content: flex-end; gap: 14px;">
+          <a href="index.html" class="btn btn-secondary">Cancel</a>
+          <button type="submit" class="btn btn-primary" id="btn-submit-report" style="min-width: 200px;">
+            <i class="fa-solid fa-paper-plane"></i> Submit Waste Report
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </main>
+
+  <!-- Modal: Report Success Confirmation -->
+  <div class="modal-overlay" id="modal-success">
+    <div class="modal-content" style="text-align: center; max-width: 520px;">
+      <div style="width: 70px; height: 70px; border-radius: 50%; background: rgba(16, 185, 129, 0.2); border: 2px solid var(--primary-400); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 32px; color: var(--primary-400);">
+        <i class="fa-solid fa-check"></i>
+      </div>
+
+      <h3 style="font-family: var(--font-heading); font-size: 1.6rem; color: white; margin-bottom: 8px;">
+        Report Saved to Database!
+      </h3>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;">
+        Your incident report has been securely stored in the database.
+      </p>
+
+      <div style="background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 16px; margin-bottom: 24px; text-align: left;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
+          <span style="color: var(--text-dim);">Ticket ID:</span>
+          <span style="font-weight: 700; color: var(--primary-300);" id="conf-ticket-id">#--</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
+          <span style="color: var(--text-dim);">Category:</span>
+          <span style="font-weight: 600; color: white;" id="conf-category">--</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
+          <span style="color: var(--text-dim);">Sector:</span>
+          <span style="font-weight: 600; color: white;" id="conf-zone">--</span>
+        </div>
+        <div id="conf-photo-row" style="display: none; justify-content: space-between; font-size: 0.9rem; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border-glass);">
+          <span style="color: var(--text-dim);">Attached Photo:</span>
+          <span style="font-weight: 600; color: var(--accent-cyan);"><i class="fa-solid fa-paperclip"></i> Saved to server</span>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <a href="dashboard.html" class="btn btn-primary btn-sm">
+          <i class="fa-solid fa-chart-line"></i> View on Dashboard
+        </a>
+        <button onclick="resetAndCloseSuccessModal()" class="btn btn-secondary btn-sm">
+          Submit Another Report
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container" style="text-align: center;">
+      <p style="color: var(--text-dim); font-size: 0.85rem;">
+        EcoGuard - Pallikaranai Marshland Waste Management System &bull; Easwari Engineering College Final Project
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script>
+    function selectCategory(catName, cardEl) {
+      document.getElementById('report-category').value = catName;
+      document.querySelectorAll('.category-card').forEach(c => c.classList.remove('selected'));
+      cardEl.classList.add('selected');
+    }
+
+    function autoFillGPS() {
+      const demoLocations = [
+        "200 Feet Radial Road, opposite Pallikaranai Eco-Park gate",
+        "Perumbakkam Lake canal bund near Wetland survey stone #12",
+        "Velachery MRTS southern perimeter stormwater outlet",
+        "Medavakkam bypass culvert near freshwater inlet marsh",
+        "Sholinganallur Radial Link Road, adjacent to mangrove reed bed"
+      ];
+      const randomLoc = demoLocations[Math.floor(Math.random() * demoLocations.length)];
+      document.getElementById('report-location').value = randomLoc;
+      showToast('Landmark pinned with Pallikaranai field coordinates!');
+    }
+
+    function handleAnonymousToggle(checkbox) {
+      const fields = document.getElementById('reporter-fields');
+      if (checkbox.checked) {
+        fields.style.opacity = '0.4';
+        fields.style.pointerEvents = 'none';
+        document.getElementById('report-name').value = 'Anonymous Citizen';
+      } else {
+        fields.style.opacity = '1';
+        fields.style.pointerEvents = 'auto';
+        const user = EcoGuardAPI.getUser();
+        if (user) {
+          document.getElementById('report-name').value = user.name;
+          document.getElementById('report-email').value = user.email;
+        } else {
+          document.getElementById('report-name').value = '';
+        }
+      }
+    }
+
+    function previewImage(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        document.getElementById('preview-filename').textContent = file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
+        document.getElementById('image-preview-container').style.display = 'flex';
+      }
+    }
+
+    function removeImage() {
+      document.getElementById('file-input').value = '';
+      document.getElementById('image-preview-container').style.display = 'none';
+    }
+
+    // Character counter
+    document.getElementById('report-description').addEventListener('input', (e) => {
+      const len = e.target.value.length;
+      document.getElementById('char-counter').textContent = `${len} / 2000 chars (min 10)`;
+      if (len < 10) {
+        document.getElementById('char-counter').style.color = '#f87171';
+      } else {
+        document.getElementById('char-counter').style.color = 'var(--primary-400)';
+      }
+    });
+
+    async function handleReportSubmit(e) {
+      e.preventDefault();
+      const category = document.getElementById('report-category').value;
+      const zone = document.getElementById('report-zone').value;
+      const location = document.getElementById('report-location').value.trim();
+      const severityChecked = document.querySelector('input[name="severity"]:checked');
+      const severity = severityChecked ? severityChecked.value : 'MEDIUM';
+      const description = document.getElementById('report-description').value.trim();
+      const isAnon = document.getElementById('toggle-anonymous').checked;
+      const reporterName = isAnon ? 'Anonymous Citizen' : (document.getElementById('report-name').value.trim() || 'Concerned Citizen');
+      const reporterEmail = isAnon ? '' : document.getElementById('report-email').value.trim();
+      const reporterPhone = isAnon ? '' : document.getElementById('report-phone').value.trim();
+
+      if (description.length < 10) {
+        showToast('Please provide a description of at least 10 characters', 'error');
+        return;
+      }
+
+      const fileInput = document.getElementById('file-input');
+      const hasPhoto = fileInput && fileInput.files && fileInput.files.length > 0;
+
+      // Construct multipart FormData so real file is safely uploaded
+      const formData = new FormData();
+      formData.append('category', category);
+      formData.append('zone', zone);
+      formData.append('location', location);
+      formData.append('severity', severity);
+      formData.append('description', description);
+      formData.append('reporterName', reporterName);
+      if (reporterEmail) formData.append('reporterEmail', reporterEmail);
+      if (reporterPhone) formData.append('reporterPhone', reporterPhone);
+
+      if (hasPhoto) {
+        formData.append('photo', fileInput.files[0]);
+      }
+
+      const btn = document.getElementById('btn-submit-report');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving Report...';
+
+      try {
+        const res = await EcoGuardAPI.submitReport(formData);
+        if (res.success && res.data) {
+          document.getElementById('conf-ticket-id').textContent = '#' + res.data.id;
+          document.getElementById('conf-category').textContent = res.data.category;
+          document.getElementById('conf-zone').textContent = res.data.zone;
+          document.getElementById('conf-photo-row').style.display = res.data.imageUrl ? 'flex' : 'none';
+          document.getElementById('modal-success').classList.add('active');
+        } else {
+          showToast(res.message || 'Failed to submit report', 'error');
+        }
+      } catch (err) {
+        console.error('Error submitting report', err);
+        showToast('Server communication error. Please try again.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Waste Report';
+      }
+    }
+
+    function resetAndCloseSuccessModal() {
+      document.getElementById('modal-success').classList.remove('active');
+      document.getElementById('waste-report-form').reset();
+      document.getElementById('image-preview-container').style.display = 'none';
+      document.getElementById('char-counter').textContent = '0 / 2000 chars (min 10)';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = EcoGuardAPI.getUser();
+      if (user) {
+        document.getElementById('report-name').value = user.name;
+        document.getElementById('report-email').value = user.email;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoGuard | About & Conservation Mission</title>
+  <meta name="description" content="Conservation background, ecological profile, and system architecture for Pallikaranai Marshland Waste Management System.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-leaf"></i>
+        </div>
+        <div>
+          <div class="brand-title">EcoGuard</div>
+          <div class="brand-sub">Pallikaranai Marshland</div>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="report.html" class="nav-link">Report Waste</a></li>
+        <li><a href="about.html" class="nav-link active">About & SDGs</a></li>
+      </ul>
+
+      <div class="nav-actions" id="nav-user-actions">
+        <!-- Injected dynamically by api.js -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container" style="padding-top: 40px; padding-bottom: 70px;">
+
+    <!-- Project Mission Card -->
+    <div class="card" style="margin-bottom: 40px; border-left: 4px solid var(--primary-500); background: linear-gradient(135deg, rgba(240, 253, 244, 0.8), #ffffff);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px;">
+        <div style="max-width: 800px;">
+          <span class="badge badge-resolved" style="margin-bottom: 10px;">
+            <i class="fa-solid fa-leaf"></i> WETLAND CONSERVATION INITIATIVE
+          </span>
+          <h2 style="font-family: var(--font-heading); font-size: 1.8rem; color: var(--text-main); margin-bottom: 8px;">
+            EcoGuard: Protecting Pallikaranai Marshland
+          </h2>
+          <p style="color: var(--text-body); font-size: 0.95rem; line-height: 1.6; margin-bottom: 12px;">
+            <strong>EcoGuard</strong> is an integrated digital waste monitoring and incident reporting platform dedicated to safeguarding 
+            Chennai's last surviving natural freshwater wetland. By providing an open channel between active citizens, volunteer field cleanup crews, 
+            and conservation authorities, EcoGuard accelerates the identification, tracking, and accountable remediation of illegal dumping.
+          </p>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <span class="badge badge-under-review"><i class="fa-solid fa-shield-halved"></i> Ramsar Site #2484</span>
+            <span class="badge badge-in-progress"><i class="fa-solid fa-people-group"></i> Community & Ranger Action</span>
+            <span class="badge badge-resolved"><i class="fa-solid fa-seedling"></i> Zero Tolerance for Wetland Dumping</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pallikaranai Marshland Ecological Profile -->
+    <div style="margin-bottom: 50px;">
+      <div style="text-align: center; max-width: 700px; margin: 0 auto 36px;">
+        <span class="badge badge-submitted" style="margin-bottom: 8px;">RAMSAR SITE #2484</span>
+        <h2 style="font-family: var(--font-heading); font-size: 2.2rem; color: white;">
+          The Ecological Jewel of South Chennai
+        </h2>
+        <p style="color: var(--text-muted);">
+          Pallikaranai Marshland is one of the few natural wetland ecosystems remaining within the Chennai metropolitan limits.
+        </p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+        <div class="card">
+          <div style="font-size: 28px; color: var(--primary-400); margin-bottom: 12px;">
+            <i class="fa-solid fa-water-ladder"></i>
+          </div>
+          <h3 style="font-family: var(--font-heading); font-size: 1.2rem; color: white; margin-bottom: 8px;">
+            Critical Hydrological Function
+          </h3>
+          <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">
+            The marshland drains an immense catchment basin of over 250 square kilometers, collecting flood waters from south Chennai 
+            and discharging into the Bay of Bengal via Okkiyam Madavu. Unregulated construction debris and plastic damming choke these vital arteries.
+          </p>
+        </div>
+
+        <div class="card">
+          <div style="font-size: 28px; color: var(--accent-cyan); margin-bottom: 12px;">
+            <i class="fa-solid fa-feather"></i>
+          </div>
+          <h3 style="font-family: var(--font-heading); font-size: 1.2rem; color: white; margin-bottom: 8px;">
+            Rich Biodiversity Haven
+          </h3>
+          <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">
+            Home to 115+ bird species (including vulnerable species like Grey Pelican and Spot-billed Pelican), 10 species of mammals, 
+            21 species of reptiles, 50 species of fish, and diverse aquatic flora essential for nitrogen filtering.
+          </p>
+        </div>
+
+        <div class="card">
+          <div style="font-size: 28px; color: var(--accent-amber); margin-bottom: 12px;">
+            <i class="fa-solid fa-fire-burner"></i>
+          </div>
+          <h3 style="font-family: var(--font-heading); font-size: 1.2rem; color: white; margin-bottom: 8px;">
+            Pollution Pressures & Threats
+          </h3>
+          <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">
+            Historically impacted by open dumping, medical waste, and raw sewage influx. Continued roadside garbage dumping and toxic runoffs 
+            threaten irreversible habitat fragmentation without coordinated digital surveillance.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- System Architecture Breakdown -->
+    <div class="card" style="margin-bottom: 50px; padding: 36px;">
+      <div style="text-align: center; margin-bottom: 30px;">
+        <span class="badge badge-in-progress" style="margin-bottom: 8px;">TECHNICAL BLUEPRINT</span>
+        <h3 style="font-family: var(--font-heading); font-size: 1.8rem; color: white;">
+          EcoGuard System Architecture
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.92rem;">
+          Designed following 3-tier modular engineering principles for real-time wetland environmental surveillance.
+        </p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 20px;">
+          <div style="color: var(--primary-400); font-weight: 700; margin-bottom: 8px; font-size: 1rem;">
+            1. Presentation Layer
+          </div>
+          <ul style="color: var(--text-muted); font-size: 0.88rem; list-style: none; display: flex; flex-direction: column; gap: 6px;">
+            <li><i class="fa-solid fa-code" style="color: var(--primary-400); margin-right: 6px;"></i> Semantic HTML5 Structure</li>
+            <li><i class="fa-solid fa-paintbrush" style="color: var(--primary-400); margin-right: 6px;"></i> Vanilla CSS Design System</li>
+            <li><i class="fa-solid fa-bolt" style="color: var(--primary-400); margin-right: 6px;"></i> Async JavaScript Fetch API</li>
+            <li><i class="fa-solid fa-mobile-screen" style="color: var(--primary-400); margin-right: 6px;"></i> 100% Mobile Responsive</li>
+          </ul>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 20px;">
+          <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 8px; font-size: 1rem;">
+            2. Application Service Layer
+          </div>
+          <ul style="color: var(--text-muted); font-size: 0.88rem; list-style: none; display: flex; flex-direction: column; gap: 6px;">
+            <li><i class="fa-brands fa-java" style="color: var(--accent-cyan); margin-right: 6px;"></i> Java 21 LTS Core</li>
+            <li><i class="fa-solid fa-gears" style="color: var(--accent-cyan); margin-right: 6px;"></i> Spring Boot 4.x REST APIs</li>
+            <li><i class="fa-solid fa-shield-halved" style="color: var(--accent-cyan); margin-right: 6px;"></i> Jakarta Bean Validation</li>
+            <li><i class="fa-solid fa-clock-rotate-left" style="color: var(--accent-cyan); margin-right: 6px;"></i> Status Audit History Logging</li>
+          </ul>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 20px;">
+          <div style="color: var(--accent-amber); font-weight: 700; margin-bottom: 8px; font-size: 1rem;">
+            3. Database & Storage Layer
+          </div>
+          <ul style="color: var(--text-muted); font-size: 0.88rem; list-style: none; display: flex; flex-direction: column; gap: 6px;">
+            <li><i class="fa-solid fa-database" style="color: var(--accent-amber); margin-right: 6px;"></i> Spring Data JPA / Hibernate</li>
+            <li><i class="fa-solid fa-server" style="color: var(--accent-amber); margin-right: 6px;"></i> H2 Embedded / MySQL RDBMS</li>
+            <li><i class="fa-solid fa-table" style="color: var(--accent-amber); margin-right: 6px;"></i> Relational Schema with Foreign Keys</li>
+            <li><i class="fa-solid fa-lock" style="color: var(--accent-amber); margin-right: 6px;"></i> Parameterized Query Safety</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Do's and Don'ts for Marshland Conservation -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+      <div class="card" style="border-top: 4px solid var(--primary-500);">
+        <h3 style="font-family: var(--font-heading); font-size: 1.2rem; color: var(--primary-300); margin-bottom: 16px;">
+          <i class="fa-solid fa-circle-check"></i> What Citizens Can Do
+        </h3>
+        <ul style="color: var(--text-muted); font-size: 0.92rem; display: flex; flex-direction: column; gap: 10px; padding-left: 20px;">
+          <li>Report any noticed plastic dumping or construction rubble immediately via EcoGuard.</li>
+          <li>Carry reusable fabric bags and stainless steel water bottles when passing through Radial Road.</li>
+          <li>Participate in volunteer weekend wetland cleanup and sapling plantation drives.</li>
+          <li>Spread awareness among roadside vendors against unsegregated food waste disposal.</li>
+        </ul>
+      </div>
+
+      <div class="card" style="border-top: 4px solid #ef4444;">
+        <h3 style="font-family: var(--font-heading); font-size: 1.2rem; color: #f87171; margin-bottom: 16px;">
+          <i class="fa-solid fa-triangle-exclamation"></i> Prohibited Activities
+        </h3>
+        <ul style="color: var(--text-muted); font-size: 0.92rem; display: flex; flex-direction: column; gap: 10px; padding-left: 20px;">
+          <li>Dumping concrete, bricks, or excavation soil inside the wetland buffer zone.</li>
+          <li>Setting fire to roadside dry reed grass or plastic trash piles.</li>
+          <li>Discharging unverified liquid effluents or chemical runoff into marsh drains.</li>
+          <li>Littering single-use polythene packaging and alcohol bottles along water edges.</li>
+        </ul>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container" style="text-align: center;">
+      <p style="color: var(--text-muted); font-size: 0.85rem;">
+        EcoGuard &bull; Pallikaranai Marshland Waste Management &bull; Dedicated to the Protection of Ramsar Site #2484
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+</body>
+</html>
